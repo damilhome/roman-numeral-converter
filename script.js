@@ -55,16 +55,20 @@ convertBtn.addEventListener('click', () => {
     inputNumber.value = '';
 
     if(userInput === '') {
+        output.classList.remove('output__number');
         output.classList.add('output__alert');
         output.textContent = 'Please enter a valid number';
     } else if(userInput < 0) {
+        output.classList.remove('output__number');
         output.classList.add('output__alert');
         output.textContent = 'Please enter a number greater than or equal to 1';
     } else if (userInput > 3999) {
+        output.classList.remove('output__number');
         output.classList.add('output__alert');
         output.textContent = 'Please enter a number less than or equal to 3999';
     } else {
         converter();
+        output.classList.remove('output__alert');
         output.classList.add('output__number');
         output.innerText = convertedNumber.join('').toUpperCase();
         convertedNumber = [];
