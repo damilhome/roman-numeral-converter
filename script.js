@@ -8,77 +8,90 @@ const output = document.getElementById('output');
 let convertedNumber = [];
 
 function getRomanIndex(input) {
-    let index = 0;
-
-    if(input > values[values.length - 1]) {
-        index = values.length - 1;
-    } else {
-        for (let i = 0; i < values.length; i++) {
-            if(values[i] === input) {
-                index = i;
-                break;
-            } else if(values[i] > input) {
-                index = i - 1;
-                break;
-            }
+    for(let i = values.length - 1; i >= 0; i--) {
+        if(values[i] <= input) {
+            return i;
         }
     }
-    return index;
 }
 
-function ruleOfThree(index, userInput) {
-    const ruleOfThree = values[index] * 3;
-    let ruleOfThreeApplies = true;
+function checkSecondHalfSpecialRule(index, userInput) {
+    const rule = values[index] + (values[index - 1] * 3);
+    let specialRuleApplies = false;
 
-    if(ruleOfThree < userInput) {
-        const remainingOfInput = userInput - ruleOfThree;
-        ruleOfThreeApplies = remainingOfInput >= values[index] ? false : true;
+    if(rule < userInput) {
+        const remainingOfInput = userInput - rule;
+        specialRuleApplies = remainingOfInput >= values[index - 1] ? true : false;
+    }
+    
+    return specialRuleApplies;
+}
+
+function checkFirstHalfSpecialRule(index, userInput) {
+    const rule = values[index] * 3;
+    let specialRuleApplies = false;
+    
+    if(rule < userInput) {
+        const remainingOfInput = userInput - rule;
+        specialRuleApplies = remainingOfInput >= values[index] ? true : false;
     }
 
-    return ruleOfThreeApplies;
+    return specialRuleApplies;
 }
 
 function convertToRoman(userInput) {
     const index = getRomanIndex(userInput);
-    const ruleOfThreeApplies = ruleOfThree(index, userInput);
-
-    if(ruleOfThreeApplies) {
-        convertedNumber.push(roman[index]);
-        userInput -= values[index];
+    
+    if((userInput > 1 && userInput < 5) || (userInput > 10 && userInput < 50) || (userInput > 100 && userInput < 500)){
+        const specialRule = checkFirstHalfSpecialRule(index, userInput);
+        if(specialRule) {
+            convertedNumber.push(roman[index]);
+            convertedNumber.push(roman[index + 1]);
+            userInput -= (values[index + 1] - values[index]);
+        } else {
+            convertedNumber.push(roman[index]);
+            userInput -= values[index];
+        }
+    } else if ((userInput > 5 && userInput < 10) || (userInput > 50 && userInput < 100) || (userInput > 500 && userInput < 1000)) {
+        const specialRule = checkSecondHalfSpecialRule(index, userInput);
+        if(specialRule) {
+            convertedNumber.push(roman[index - 1]);
+            convertedNumber.push(roman[index + 1]);
+            userInput -= (values[index + 1] - values[index - 1]);
+        } else {
+            convertedNumber.push(roman[index]);
+            userInput -= values[index];
+        }
     } else {
         convertedNumber.push(roman[index]);
-        convertedNumber.push(roman[index + 1]);
-        userInput -= (values[index + 1] - values[index]);
+        userInput -= values[index];
     }
     
    if(userInput > 0) {
-        return convertToRoman();
-    } else {
-        return;
+        convertToRoman(userInput);
     }
 }
 
-function startConvert() {
-    const userInput = inputNumber.value;
-    inputNumber.value = '';
+function showError(message) {
+    output.classList.remove('output__number');
+    output.classList.add('output__alert');
+    output.textContent = message;
+}
 
-    if(userInput === '') {
-        output.classList.remove('output__number');
-        output.classList.add('output__alert');
-        output.textContent = 'Please enter a valid number';
+function startConvert() {
+    const userInput = parseInt(inputNumber.value);
+
+    if(!userInput) {
+        showError('Please enter a valid number');
     } else if(userInput < minNumber) {
-        output.classList.remove('output__number');
-        output.classList.add('output__alert');
-        output.textContent = 'Please enter a number greater than or equal to 1';
+        showError('Please enter a number greater than or equal to 1');
     } else if (userInput > maxNumber) {
-        output.classList.remove('output__number');
-        output.classList.add('output__alert');
-        output.textContent = 'Please enter a number less than or equal to 3999';
+        showError('Please enter a number less than or equal to 3999');
     } else {
         convertToRoman(userInput);
         output.classList.remove('output__alert');
         output.classList.add('output__number');
-        output.innerText = convertedNumber.join('').toUpperCase();
+        output.textContent = convertedNumber.join('').toUpperCase();
         convertedNumber = [];
     }
 }
