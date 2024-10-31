@@ -39,6 +39,11 @@ function checkFirstHalfSpecialRule(index, userInput) {
     return specialRuleApplies;
 }
 
+function romanNumberNormalCase(index, userInput) {
+    convertedNumber.push(roman[index]);
+    return userInput -= values[index];
+}
+
 function convertToRoman(userInput) {
     const index = getRomanIndex(userInput);
     
@@ -49,8 +54,7 @@ function convertToRoman(userInput) {
             convertedNumber.push(roman[index + 1]);
             userInput -= (values[index + 1] - values[index]);
         } else {
-            convertedNumber.push(roman[index]);
-            userInput -= values[index];
+            userInput = romanNumberNormalCase(index, userInput);
         }
     } else if ((userInput > 5 && userInput < 10) || (userInput > 50 && userInput < 100) || (userInput > 500 && userInput < 1000)) {
         const specialRule = checkSecondHalfSpecialRule(index, userInput);
@@ -59,12 +63,10 @@ function convertToRoman(userInput) {
             convertedNumber.push(roman[index + 1]);
             userInput -= (values[index + 1] - values[index - 1]);
         } else {
-            convertedNumber.push(roman[index]);
-            userInput -= values[index];
+            userInput = romanNumberNormalCase(index, userInput);
         }
     } else {
-        convertedNumber.push(roman[index]);
-        userInput -= values[index];
+        userInput = romanNumberNormalCase(index, userInput);
     }
     
    if(userInput > 0) {
