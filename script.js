@@ -1,22 +1,23 @@
-const romanos = ['i', 'v', 'x', 'l', 'c', 'd', 'm'];
-const valores = [1, 5, 10, 50, 100, 500, 1000];
-let convertedNumber = [];
+const roman = ['i', 'v', 'x', 'l', 'c', 'd', 'm'];
+const values = [1, 5, 10, 50, 100, 500, 1000];
+const minNumber = 1;
+const maxNumber = 3999;
 const inputNumber = document.getElementById('number');
 const convertBtn = document.getElementById('convert-btn');
 const output = document.getElementById('output');
-let userInput = null;
+let convertedNumber = [];
 
 function getRomanIndex(input) {
     let index = 0;
 
-    if(input > 1000) {
-        index = valores.length - 1;
+    if(input > values[values.length - 1]) {
+        index = values.length - 1;
     } else {
-        for (let i = 0; i < valores.length; i++) {
-            if(valores[i] === input) {
+        for (let i = 0; i < values.length; i++) {
+            if(values[i] === input) {
                 index = i;
                 break;
-            } else if(valores[i] > input) {
+            } else if(values[i] > input) {
                 index = i - 1;
                 break;
             }
@@ -25,52 +26,66 @@ function getRomanIndex(input) {
     return index;
 }
 
-function converter() {
-    index = getRomanIndex(userInput)
-    let ruleOfThree = true
+function ruleOfThree(index, userInput) {
+    const ruleOfThree = values[index] * 3;
+    let ruleOfThreeApplies = true;
 
-    if(valores[index] * 3 < userInput) {
-        const newInput = userInput - valores[index] * 3;
-        ruleOfThree = newInput >= valores[index] ? false : true;
+    if(ruleOfThree < userInput) {
+        const remainingOfInput = userInput - ruleOfThree;
+        ruleOfThreeApplies = remainingOfInput >= values[index] ? false : true;
     }
 
-    if(ruleOfThree) {
-        convertedNumber.push(romanos[index]);
-        userInput -= valores[index];
+    return ruleOfThreeApplies;
+}
+
+function convertToRoman(userInput) {
+    const index = getRomanIndex(userInput);
+    const ruleOfThreeApplies = ruleOfThree(index, userInput);
+
+    if(ruleOfThreeApplies) {
+        convertedNumber.push(roman[index]);
+        userInput -= values[index];
     } else {
-        convertedNumber.push(romanos[index]);
-        convertedNumber.push(romanos[index + 1]);
-        userInput -= (valores[index + 1] - valores[index]);
+        convertedNumber.push(roman[index]);
+        convertedNumber.push(roman[index + 1]);
+        userInput -= (values[index + 1] - values[index]);
     }
     
    if(userInput > 0) {
-        return converter();
+        return convertToRoman();
     } else {
         return;
     }
 }
 
-convertBtn.addEventListener('click', () => {
-    userInput = inputNumber.value;
+function startConvert() {
+    const userInput = inputNumber.value;
     inputNumber.value = '';
 
     if(userInput === '') {
         output.classList.remove('output__number');
         output.classList.add('output__alert');
         output.textContent = 'Please enter a valid number';
-    } else if(userInput < 0) {
+    } else if(userInput < minNumber) {
         output.classList.remove('output__number');
         output.classList.add('output__alert');
         output.textContent = 'Please enter a number greater than or equal to 1';
-    } else if (userInput > 3999) {
+    } else if (userInput > maxNumber) {
         output.classList.remove('output__number');
         output.classList.add('output__alert');
         output.textContent = 'Please enter a number less than or equal to 3999';
     } else {
-        converter();
+        convertToRoman(userInput);
         output.classList.remove('output__alert');
         output.classList.add('output__number');
         output.innerText = convertedNumber.join('').toUpperCase();
         convertedNumber = [];
+    }
+}
+
+convertBtn.addEventListener('click', startConvert)
+inputNumber.addEventListener('keydown', (e) => {
+    if(e.key === 'Enter') {
+        startConvert()
     }
 })
