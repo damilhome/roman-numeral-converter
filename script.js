@@ -9,32 +9,35 @@ function getRomanIndex(input) {
 
     if(input > 1000) {
         index = valores.length - 1;
-        return index;
-    }
-
-    for (let i = 0; i < valores.length; i++) {
-        
-        if(valores[i] === input) {
-            index = i;
-        } else if(valores[i] > input) {
-            index = i - 1;
+    } else {
+        for (let i = 0; i < valores.length; i++) {
+            
+            if(valores[i] === input) {
+                index = i;
+            } else if(valores[i] > input) {
+                index = i - 1;
+            }
         }
     }
-
+    
     return index;
+
 }
 
 function converter() {
     index = getRomanIndex(userInput)
-    convertedNumber.push(romanos[index]);
-    userInput -= valores[index];
+    const ruleOfThree = valores[index] * 3
 
-    /* TODO: Fazer um if para multiplicar o valores[index] por 3 e ver se é maior que
-    o userInput atual. Se for, então o número romano será adicionado na frente, normalmente.
-    Caso não for maior, então vou adicionar somente um do valores[index] e adicionar outro do
-    valores[index + 1], para poder fazer essa subtração e ter o valor que eu espero ter.
-    */
-    if(userInput > 0) {
+    if(ruleOfThree > userInput) {
+        convertedNumber.push(romanos[index]);
+        userInput -= valores[index];
+    } else {
+        convertedNumber.push(romanos[index]);
+        convertedNumber.push(romanos[index + 1]);
+        userInput -= (valores[index + 1] - valores[index]);
+    }
+    
+   if(userInput > 0) {
         converter();
     } else {
         return;
