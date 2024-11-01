@@ -162,7 +162,7 @@ function checkInvalidLetter(e) {
     let invalidLetter = true;
 
     roman.forEach(letter => {
-        if(e.key.toUpperCase() === letter) {
+        if(e.key.toUpperCase() === letter || e.key === 'Backspace') {
             invalidLetter = false;
         }
     })
