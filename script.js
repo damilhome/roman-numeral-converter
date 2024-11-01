@@ -10,6 +10,8 @@ const converterRoman = document.getElementById('converter-roman');
 const converterDecimal = document.getElementById('converter-decimal');
 const inputRomanNumber = document.getElementById('text');
 const convertBtnRoman = document.getElementById('convert-btn-roman');
+const decimalToRoman = document.getElementById('decimal-to-roman');
+const romanToDecimal = document.getElementById('roman-to-decimal');
 let convertedNumber = [];
 let decimal = 0;
 
@@ -117,6 +119,7 @@ function convertToDecimal(userInput) {
 }
 
 function showError(message) {
+    output.classList.remove('hidden');
     output.classList.remove('output__number');
     output.classList.add('output__alert');
     output.textContent = message;
@@ -133,6 +136,7 @@ function startConvertToRoman() {
         showError('Please enter a number less than or equal to 3999');
     } else {
         convertToRoman(userInput);
+        output.classList.remove('hidden');
         output.classList.remove('output__alert');
         output.classList.add('output__number');
         output.textContent = convertedNumber.join('').toUpperCase();
@@ -145,12 +149,14 @@ function startConvertToDecimal() {
     const userInput = inputRomanNumber.value;
 
     if(userInput === '') {
+        output.classList.remove('hidden');
         output.classList.remove('output__number');
         output.classList.add('output__alert');
         output.textContent = 'Please enter a valid number';
     } else {
         convertToDecimal(userInput);
         console.log(`Ended conversion function`)
+        output.classList.remove('hidden');
         output.classList.remove('output__alert');
         output.classList.add('output__number');
         output.textContent = decimal;
@@ -177,7 +183,7 @@ function letterToUpperCase(e) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    if(selectorButtons[0].classList.contains('selected')) {
+    if(decimalToRoman.classList.contains('selected')) {
         converterRoman.classList.remove('hidden');
         converterDecimal.classList.add('hidden');
 
@@ -188,7 +194,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         })
     } else {
-        console.log('Entrou no roman')
         converterRoman.classList.add('hidden');
         converterDecimal.classList.remove('hidden')
 
@@ -201,4 +206,36 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         convertBtnRoman.addEventListener('click', startConvertToDecimal)
     }
+})
+
+decimalToRoman.addEventListener('click', () => {
+    decimalToRoman.classList.add('selected');
+    romanToDecimal.classList.remove('selected');
+    converterRoman.classList.remove('hidden');
+    converterDecimal.classList.add('hidden');
+    output.classList.add('hidden');
+
+    convertBtn.addEventListener('click', startConvertToRoman)
+    inputNumber.addEventListener('keydown', (e) => {
+        if(e.key === 'Enter') {
+            startConvertToRoman()
+        }
+    })
+})
+
+romanToDecimal.addEventListener('click', () => {
+    romanToDecimal.classList.add('selected');
+    decimalToRoman.classList.remove('selected');
+    converterRoman.classList.add('hidden');
+    converterDecimal.classList.remove('hidden')
+    output.classList.add('hidden');
+
+    inputRomanNumber.addEventListener('keydown', (e) => checkInvalidLetter(e));
+    inputRomanNumber.addEventListener('input', (e) => letterToUpperCase(e));
+    inputRomanNumber.addEventListener('keydown', (e) => {
+        if(e.key === 'Enter') {
+            startConvertToDecimal()
+        }
+    })
+    convertBtnRoman.addEventListener('click', startConvertToDecimal)
 })
