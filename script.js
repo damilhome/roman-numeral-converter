@@ -218,11 +218,3 @@ romanToDecimal.addEventListener('click', () => {
 
     romanToDecimalEventHandler(convertBtnRoman, inputRomanNumber);
 })
-
-/* 
-TODO:
-- colocar um verificador para que, ao converter de romano para decimal, só chamar
-a outra conversão se o número for menor que 4000, caso contrário, mostrar a mensagem
-de alerta na tela
-- Veriificar se tem outros alertas para mostrar na tela
-*/
