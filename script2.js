@@ -1,51 +1,78 @@
-const roman = ['I', 'V', 'X', 'L', 'C', 'D', 'M'];
+const roman = ['i', 'v', 'x', 'l', 'c', 'd', 'm'];
 const values = [1, 5, 10, 50, 100, 500, 1000];
 const minNumber = 1;
 const maxNumber = 3999;
-let convertedNumber = [];
+const inputNumber = document.getElementById('number');
+const convertBtn = document.getElementById('convert-btn');
+const output = document.getElementById('output');
+let decimal = 0;
 
-// Função para encontrar o índice correspondente ao valor mais próximo menor ou igual ao número do usuário
-function getRomanIndex(input) {
-    let index = 0;
-    for (let i = 0; i < values.length; i++) {
-        if (values[i] > input) break;
-        index = i;
-    }
-    return index;
-}
-
-// Função principal para conversão
-function convertToRoman(userInput) {
-    if (userInput === 0) return; // Caso base para a recursão
-
-    const index = getRomanIndex(userInput);
-
-    // Verificação para aplicar a regra de subtração
-    if (index > 0 && userInput >= values[index] - values[index - 1] && userInput < values[index]) {
-        // Adiciona o símbolo subtraído
-        convertedNumber.push(roman[index - 1]);
-        convertedNumber.push(roman[index]);
-        userInput -= values[index] - values[index - 1];
-    } else {
-        // Caso comum: adiciona o símbolo correspondente e subtrai o valor
-        convertedNumber.push(roman[index]);
-        userInput -= values[index];
-    }
-
-    // Chamamos a função recursivamente até `userInput` se tornar zero
-    convertToRoman(userInput);
-}
-
-// Função de início e formatação da entrada
-function startConvert(inputNumber) {
-    if (inputNumber < minNumber || inputNumber > maxNumber) {
-        return 'Please enter a number between 1 and 3999';
-    }
+function convertToDecimal(userInput) {
+    console.log(`Started the conversion function`)
+    const arrNumbers = userInput.split('');
+    console.log(arrNumbers);
     
-    convertedNumber = []; // Reset para nova conversão
-    convertToRoman(inputNumber);
-    return convertedNumber.join('');
+    for(let i = 0; i < arrNumbers.length; i++) {
+        const numberIndex = roman.indexOf(arrNumbers[i]);
+        console.log(`numberIndex = ${numberIndex}`)
+        const numberValue = values[numberIndex];
+        console.log(`numberValue = ${numberValue}`)
+    
+        if(i < arrNumbers.length - 1) {
+            console.log(`Ainda tem um número à frente`)
+            const nextNumberIndex = roman.indexOf(arrNumbers[i + 1]);
+            console.log(`nextNumberIndex = ${nextNumberIndex}`)
+            const nextNumberValue = values[nextNumberIndex]
+            console.log(`nextNumberValue = ${nextNumberValue}`)
+
+            if(numberValue < nextNumberValue) {
+                console.log(`numberValue menor que próximo número`)
+                decimal += nextNumberValue - numberValue;
+                console.log(`Decimal value = ${decimal}`)
+                i++;
+            } else {
+                console.log(`numberValue maior que próximo número`)
+                decimal += numberValue;
+                console.log(`Decimal value = ${decimal}`)
+            }
+        } else {
+            console.log(`Não há outro número à frente`)
+            decimal += numberValue;
+            console.log(`Decimal value = ${decimal}`)
+        }
+    }
+
+
 }
 
-// Exemplo de chamada
-console.log(startConvert(1989)); // Deve exibir "MCMLXXXIX"
+function startConvert() {
+    console.log(`Start to convert`)
+    const userInput = inputNumber.value;
+
+    convertToDecimal(userInput);
+    console.log(`Ended conversion function`)
+    output.classList.add('output__number');
+    output.textContent = decimal;
+    decimal = 0;
+}
+
+inputNumber.addEventListener('keydown', (e) => {
+    let invalidLetter = true;
+
+    roman.forEach(letter => {
+        if(e.key === letter) {
+            invalidLetter = false;
+        }
+    })
+
+    if(invalidLetter) {
+        e.preventDefault();
+    }
+})
+
+convertBtn.addEventListener('click', startConvert)
+inputNumber.addEventListener('keydown', (e) => {
+    if(e.key === 'Enter') {
+        startConvert()
+    }
+})
