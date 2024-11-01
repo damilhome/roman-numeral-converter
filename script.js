@@ -140,7 +140,15 @@ function startConvertToDecimal() {
         outputClasslistHandler('output__number', 'output__alert', 'Please enter a valid number');
     } else {
         convertToDecimal(userInput);
-        outputClasslistHandler('output__alert', 'output__number', decimal)
+
+        if(decimal < maxNumber) {
+            outputClasslistHandler('output__alert', 'output__number', decimal)
+            convertToRoman(decimal);
+            inputRomanNumber.value = convertedNumber.join('').toUpperCase();
+            convertedNumber = [];
+        } else {
+            showError('Please enter a number less than or equal to 3999');
+        }
         decimal = 0;
     }
 }
@@ -213,10 +221,6 @@ romanToDecimal.addEventListener('click', () => {
 
 /* 
 TODO:
-- com essa integração, toda vez que converter de romano para decimal,
-pegar esse decimal e chamar o script de conversão de decimal para romano
-e atualizar o valor que está sendo mostrado no input.value para esse novo romano,
-para garantir que o valor mostrado está escrito corretamente.
 - colocar um verificador para que, ao converter de romano para decimal, só chamar
 a outra conversão se o número for menor que 4000, caso contrário, mostrar a mensagem
 de alerta na tela
