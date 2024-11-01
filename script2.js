@@ -2,8 +2,8 @@ const roman = ['I', 'V', 'X', 'L', 'C', 'D', 'M'];
 const values = [1, 5, 10, 50, 100, 500, 1000];
 const minNumber = 1;
 const maxNumber = 3999;
-const inputNumber = document.getElementById('number');
-const convertBtn = document.getElementById('convert-btn');
+const inputRomanNumber = document.getElementById('text');
+const convertBtnRoman = document.getElementById('convert-btn-roman');
 const output = document.getElementById('output');
 let decimal = 0;
 
@@ -56,11 +56,9 @@ function convertToDecimal(userInput) {
             console.log(`Decimal value = ${decimal}`)
         }
     }
-
-
 }
 
-function startConvert() {
+function startConvertToDecimal() {
     console.log(`Start to convert`)
     const userInput = inputNumber.value;
 
@@ -77,6 +75,7 @@ function startConvert() {
         decimal = 0;
     }
 }
+
 function checkInvalidLetter(e) {
     let invalidLetter = true;
 
@@ -96,12 +95,12 @@ function letterToUpperCase(e) {
 }
 
 
-inputNumber.addEventListener('keydown', (e) => checkInvalidLetter(e));
-inputNumber.addEventListener('input', (e) => letterToUpperCase(e));
+inputRomanNumber.addEventListener('keydown', (e) => checkInvalidLetter(e));
+inputRomanNumber.addEventListener('input', (e) => letterToUpperCase(e));
 
-convertBtn.addEventListener('click', startConvert)
-inputNumber.addEventListener('keydown', (e) => {
+convertBtnRoman.addEventListener('click', startConvertToDecimal)
+inputRomanNumber.addEventListener('keydown', (e) => {
     if(e.key === 'Enter') {
-        startConvert()
+        startConvertToDecimal()
     }
 })

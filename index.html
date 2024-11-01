@@ -10,10 +10,19 @@
     <main id="container">
         <img src="https://cdn.freecodecamp.org/platform/universal/fcc_primary.svg" alt="freecodecamp logo" class="logo">
         <h1>ROMAN NUMERAL CONVERTER</h1>
-        <section class="converter">
-            <h2 class="converter__title">Enter a Number</h2>
+        <div class="selector">
+            <h2 id="decimal-to-roman" class="selector__button ">Decimal to roman</h2>
+            <h2 id="roman-to-decimal" class="selector__button selected">Roman to decimal</h2>
+        </div>
+        <section id="converter-roman" class="converter">
+            <h2 class="converter__title">Enter a Decimal Number</h2>
             <input type="number" class="converter__input" id="number">
             <button type="button" class="converter__btn" id="convert-btn">Convert</button>
+        </section>
+        <section id="converter-decimal" class="converter hidden">
+            <h2 class="converter__title">Enter a Roman Number</h2>
+            <input type="text" class="converter__input" id="text">
+            <button type="button" class="converter__btn" id="convert-btn-roman">Convert</button>
         </section>
         <p id="output">
         </p>

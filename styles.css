@@ -51,6 +51,28 @@ h1 {
     max-width: 400px;
 }
 
+.selector{
+    display: flex;
+    width: 100%;
+}
+
+.selector__button {
+    width: 100%;
+    color: var(--text-color);
+    padding: 15px;
+}
+
+.selector__button:hover {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.selected {
+    background-color: var(--converter-bg-color);
+    border: 1px solid var(--border-color);
+    border-radius: 2px;
+}
+
 .converter,
 .output__number {
     width: 100%;
@@ -103,4 +125,8 @@ h1 {
     color: var(--alert-color);
     font-size: 1.5rem;
     font-family: sans-serif;
+}
+
+.hidden {
+    display: none;
 }
