@@ -1,4 +1,5 @@
 const roman = ['I', 'V', 'X', 'L', 'C', 'D', 'M'];
+const allowedRoman = ['I', 'V', 'X', 'L', 'C', 'D', 'M', 'Backspace', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Delete', 'Tab'];
 const values = [1, 5, 10, 50, 100, 500, 1000];
 const minNumber = 1;
 const maxNumber = 3999;
@@ -156,8 +157,8 @@ function startConvertToDecimal() {
 function checkInvalidLetter(e) {
     let invalidLetter = true;
 
-    roman.forEach(letter => {
-        if(e.key.toUpperCase() === letter || e.key === 'Backspace') {
+    allowedRoman.forEach(letter => {
+        if(e.key.toUpperCase() === letter.toUpperCase()) {
             invalidLetter = false;
         }
     })
